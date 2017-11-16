@@ -1,6 +1,6 @@
 {
   "name": "egg-amqp",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Amqp for Egg.js",
   "eggPlugin": {
     "name": "amqp"
@@ -9,6 +9,7 @@
     "egg",
     "eggPlugin",
     "egg-plugin",
+    "egg-amqp",
     "amqp",
     "amqplib",
     "RabbitMQ"
