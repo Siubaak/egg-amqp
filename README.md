@@ -11,9 +11,7 @@
 [download-image]: https://img.shields.io/npm/dm/egg-amqp.svg?style=flat-square
 [download-url]: https://npmjs.org/package/egg-amqp
 
-<!--
-Description here.
--->
+Amqp client for egg framework with [amqplib](https://www.npmjs.com/package/amqplib).
 
 ## Install
 
@@ -36,6 +34,13 @@ exports.amqp = {
 ```js
 // {app_root}/config/config.default.js
 exports.amqp = {
+  protocol: 'amqp',
+  hostname: 'localhost',
+  port: 5672,
+  username: 'guest',
+  password: 'guest',
+  vhost: '/',
+  // opts: {},
 };
 ```
 
@@ -43,11 +48,28 @@ see [config/config.default.js](config/config.default.js) for more detail.
 
 ## Example
 
-<!-- example here -->
+### Produce
+
+```js
+const ch = yield app.amqp.createChannel();
+yield ch.assertQueue('test');
+ch.sendToQueue(queue, new Buffer('hello world'));
+```
+
+### Consume
+
+```js
+const ch = yield app.amqp.createChannel();
+yield ch.assertQueue('test');
+const msg = yield new Promise(resolve => ch.consume(queue, msg => resolve(msg)));
+ch.ack(msg);
+
+console.log(msg.content.toString()); // hello world
+```
 
 ## Questions & Suggestions
 
-Please open an issue [here](https://github.com/eggjs/egg/issues).
+Please open an issue [here](https://github.com/Siubaak/egg-amqp/issues).
 
 ## License
 

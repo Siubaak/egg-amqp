@@ -1,7 +1,6 @@
 'use strict';
 
 module.exports = app => {
-  app.get('/', function* () {
-    this.body = 'hi, ' + app.plugins.amqp.name;
-  });
+  app.get('/p', app.controller.rabbitmq.produce);
+  app.get('/c', app.controller.rabbitmq.consume);
 };

@@ -2,75 +2,75 @@
 
 [![NPM version][npm-image]][npm-url]
 [![build status][travis-image]][travis-url]
-[![Test coverage][codecov-image]][codecov-url]
-[![David deps][david-image]][david-url]
-[![Known Vulnerabilities][snyk-image]][snyk-url]
 [![npm download][download-image]][download-url]
 
 [npm-image]: https://img.shields.io/npm/v/egg-amqp.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/egg-amqp
-[travis-image]: https://img.shields.io/travis/eggjs/egg-amqp.svg?style=flat-square
-[travis-url]: https://travis-ci.org/eggjs/egg-amqp
-[codecov-image]: https://img.shields.io/codecov/c/github/eggjs/egg-amqp.svg?style=flat-square
-[codecov-url]: https://codecov.io/github/eggjs/egg-amqp?branch=master
-[david-image]: https://img.shields.io/david/eggjs/egg-amqp.svg?style=flat-square
-[david-url]: https://david-dm.org/eggjs/egg-amqp
-[snyk-image]: https://snyk.io/test/npm/egg-amqp/badge.svg?style=flat-square
-[snyk-url]: https://snyk.io/test/npm/egg-amqp
+[travis-image]: https://img.shields.io/travis/Siubaak/egg-amqp.svg?style=flat-square
+[travis-url]: https://travis-ci.org/Siubaak/egg-amqp
 [download-image]: https://img.shields.io/npm/dm/egg-amqp.svg?style=flat-square
 [download-url]: https://npmjs.org/package/egg-amqp
 
-<!--
-Description here.
--->
+基于[amqplib](https://www.npmjs.com/package/amqplib)的amqp客户端。
 
-## 依赖说明
+## 安装
 
-### 依赖的 egg 版本
+```bash
+$ npm i egg-amqp --save
+```
 
-egg-amqp 版本 | egg 1.x
---- | ---
-1.x | 😁
-0.x | ❌
-
-### 依赖的插件
-<!--
-
-如果有依赖其它插件，请在这里特别说明。如
-
-- security
-- multipart
-
--->
-
-## 开启插件
+## 使用
 
 ```js
-// config/plugin.js
+// {app_root}/config/plugin.js
 exports.amqp = {
   enable: true,
   package: 'egg-amqp',
 };
 ```
 
-## 使用场景
+## 配置
 
-- Why and What: 描述为什么会有这个插件，它主要在完成一件什么事情。
-尽可能描述详细。
-- How: 描述这个插件是怎样使用的，具体的示例代码，甚至提供一个完整的示例，并给出链接。
+```js
+// {app_root}/config/config.default.js
+exports.amqp = {
+  protocol: 'amqp',
+  hostname: 'localhost',
+  port: 5672,
+  username: 'guest',
+  password: 'guest',
+  vhost: '/',
+  // opts: {},
+};
+```
 
-## 详细配置
+详细配置见[config/config.default.js](config/config.default.js)。
 
-请到 [config/config.default.js](config/config.default.js) 查看详细配置项说明。
+## 例子
 
-## 单元测试
+### 生产
 
-<!-- 描述如何在单元测试中使用此插件，例如 schedule 如何触发。无则省略。-->
+```js
+const ch = yield app.amqp.createChannel();
+yield ch.assertQueue('test');
+ch.sendToQueue(queue, new Buffer('hello world'));
+```
 
-## 提问交流
+### 消费
 
-请到 [egg issues](https://github.com/eggjs/egg/issues) 异步交流。
+```js
+const ch = yield app.amqp.createChannel();
+yield ch.assertQueue('test');
+const msg = yield new Promise(resolve => ch.consume(queue, msg => resolve(msg)));
+ch.ack(msg);
 
-## License
+console.log(msg.content.toString()); // hello world
+```
+
+## 提问及建议
+
+请到[这里](https://github.com/Siubaak/egg-amqp/issues)进行交流。
+
+## 协议
 
 [MIT](LICENSE)

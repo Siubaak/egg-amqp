@@ -15,10 +15,16 @@ describe('test/amqp.test.js', () => {
   after(() => app.close());
   afterEach(mm.restore);
 
-  it('should GET /', () => {
+  it('should produce a msg', () => {
     return request(app.callback())
-      .get('/')
-      .expect('hi, amqp')
+      .get('/p')
+      .query({ msg: 'hello world' })
       .expect(200);
+  });
+  it('should consume a msg', () => {
+    return request(app.callback())
+      .get('/c')
+      .expect(200)
+      .expect({ msg: 'hello world' });
   });
 });
